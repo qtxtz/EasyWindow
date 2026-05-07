@@ -14,10 +14,10 @@ import com.hjq.window.EasyWindow;
 import com.hjq.window.OnWindowLifecycleCallback;
 import com.hjq.window.OnWindowScreenRotationCallback;
 import com.hjq.window.OnWindowViewClickListener;
-import com.hjq.window.draggable.AbstractWindowDraggableRule;
-import com.hjq.window.draggable.AbstractWindowDraggableRule.OnWindowDraggingListener;
+import com.hjq.window.draggable.IWindowDraggableRule;
 import com.hjq.window.draggable.SpringBackWindowDraggableRule;
-import com.hjq.window.draggable.SpringBackWindowDraggableRule.SpringBackAnimCallback;
+import com.hjq.window.draggable.callback.OnSpringBackAnimCallback;
+import com.hjq.window.draggable.callback.OnWindowDraggingCallback;
 
 /**
  *    author : Android 轮子哥
@@ -26,8 +26,8 @@ import com.hjq.window.draggable.SpringBackWindowDraggableRule.SpringBackAnimCall
  *    desc   : 拖拽后半隐的悬浮窗
  */
 public final class SemiStealthWindow extends EasyWindow<SemiStealthWindow>
-                                    implements OnWindowDraggingListener,
-                                                SpringBackAnimCallback,
+                                    implements OnWindowDraggingCallback,
+                                                OnSpringBackAnimCallback,
                                                 OnWindowViewClickListener<View>,
                                                 OnWindowLifecycleCallback,
     OnWindowScreenRotationCallback {
@@ -54,8 +54,8 @@ public final class SemiStealthWindow extends EasyWindow<SemiStealthWindow>
         SpringBackWindowDraggableRule windowDraggableRule = new SpringBackWindowDraggableRule(
             SpringBackWindowDraggableRule.ORIENTATION_HORIZONTAL);
         windowDraggableRule.setAllowMoveToScreenSafeArea(false);
-        windowDraggableRule.setWindowDraggingListener(this);
-        windowDraggableRule.setSpringBackAnimCallback(this);
+        windowDraggableRule.setOnWindowDraggingCallback(this);
+        windowDraggableRule.setOnSpringBackAnimCallback(this);
         setWindowDraggableRule(windowDraggableRule);
 
         setOnClickListenerByView(android.R.id.icon, this);
@@ -64,7 +64,7 @@ public final class SemiStealthWindow extends EasyWindow<SemiStealthWindow>
 
         int x = 0;
         if (!windowDraggableRule.isAllowMoveToScreenSafeArea() && context instanceof Activity) {
-            Rect safeInsetRect = AbstractWindowDraggableRule.getSafeInsetRect(((Activity) context).getWindow());
+            Rect safeInsetRect = windowDraggableRule.getSafeInsetRect(((Activity) context).getWindow());
             if (safeInsetRect != null) {
                 x = safeInsetRect.left;
             }
@@ -86,7 +86,7 @@ public final class SemiStealthWindow extends EasyWindow<SemiStealthWindow>
             return;
         }
 
-        AbstractWindowDraggableRule windowDraggableRule = getWindowDraggableRule();
+        IWindowDraggableRule windowDraggableRule = getWindowDraggableRule();
         if (windowDraggableRule == null) {
             return;
         }
@@ -103,7 +103,7 @@ public final class SemiStealthWindow extends EasyWindow<SemiStealthWindow>
      */
     @SuppressLint("RtlHardcoded")
     private void toHalfShow(int gravity) {
-        AbstractWindowDraggableRule windowDraggableRule = getWindowDraggableRule();
+        IWindowDraggableRule windowDraggableRule = getWindowDraggableRule();
         if (windowDraggableRule == null) {
             return;
         }
@@ -120,7 +120,7 @@ public final class SemiStealthWindow extends EasyWindow<SemiStealthWindow>
         switch (gravity) {
             case Gravity.LEFT:
                 WindowManager.LayoutParams windowParams = getWindowParams();
-                Rect safeInsetRect = windowDraggableRule.getSafeInsetRect();
+                Rect safeInsetRect = windowDraggableRule.getSafeInsetRect(this);
                 if (safeInsetRect != null && safeInsetRect.left > 0 && windowParams.x > 0) {
                     windowDraggableRule.updateLocation(windowParams.x - viewWidth / 2f, windowParams.y, true);
                 } else {
@@ -157,11 +157,11 @@ public final class SemiStealthWindow extends EasyWindow<SemiStealthWindow>
         }
         int viewWidth = rootLayout.getWidth();
         int viewHeight = rootLayout.getHeight();
-        AbstractWindowDraggableRule windowDraggableRule = getWindowDraggableRule();
+        IWindowDraggableRule windowDraggableRule = getWindowDraggableRule();
         if (windowDraggableRule == null) {
             return;
         }
-        Rect safeInsetRect = windowDraggableRule.getSafeInsetRect();
+        Rect safeInsetRect = windowDraggableRule.getSafeInsetRect(this);
         if (safeInsetRect != null && safeInsetRect.left > 0 &&
             getWindowParams().x > 0 && getWindowParams().x < safeInsetRect.left) {
             WindowManager.LayoutParams windowParams = getWindowParams();
@@ -189,11 +189,11 @@ public final class SemiStealthWindow extends EasyWindow<SemiStealthWindow>
      * 当前是否为半边显示
      */
     private boolean isHalfShow() {
-        AbstractWindowDraggableRule windowDraggableRule = getWindowDraggableRule();
+        IWindowDraggableRule windowDraggableRule = getWindowDraggableRule();
         if (windowDraggableRule == null) {
             return false;
         }
-        Rect safeInsetRect = windowDraggableRule.getSafeInsetRect();
+        Rect safeInsetRect = windowDraggableRule.getSafeInsetRect(this);
         if (safeInsetRect != null && safeInsetRect.left > 0 &&
             getWindowParams().x > 0 && getWindowParams().x < safeInsetRect.left) {
             return true;
@@ -215,7 +215,7 @@ public final class SemiStealthWindow extends EasyWindow<SemiStealthWindow>
             clipBounds.right != viewWidth || clipBounds.bottom != viewHeight;
     }
 
-    /** {@link OnWindowDraggingListener} */
+    /** {@link OnWindowDraggingCallback} */
 
     @Override
     public void onWindowDraggingStart(@NonNull EasyWindow<?> easyWindow) {
@@ -230,7 +230,7 @@ public final class SemiStealthWindow extends EasyWindow<SemiStealthWindow>
         mDraggingRunning = false;
     }
 
-    /** {@link SpringBackAnimCallback} */
+    /** {@link OnSpringBackAnimCallback} */
 
     @Override
     public void onSpringBackAnimationStart(@NonNull EasyWindow<?> easyWindow, @NonNull Animator animator) {
@@ -243,7 +243,7 @@ public final class SemiStealthWindow extends EasyWindow<SemiStealthWindow>
         postStayEdgeRunnable();
     }
 
-    /** {@link SpringBackAnimCallback} */
+    /** {@link OnWindowViewClickListener} */
 
     @Override
     public void onClick(@NonNull EasyWindow<?> easyWindow, @NonNull View view) {

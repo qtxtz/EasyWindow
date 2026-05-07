@@ -38,7 +38,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.Px;
 import androidx.annotation.StringRes;
-import com.hjq.window.draggable.AbstractWindowDraggableRule;
+import com.hjq.window.draggable.IWindowDraggableRule;
 import com.hjq.window.draggable.MovingWindowDraggableRule;
 import com.hjq.window.draggable.SpringBackWindowDraggableRule;
 import java.lang.ref.Reference;
@@ -112,7 +112,7 @@ public class EasyWindow<X extends EasyWindow<?>> implements ScreenOrientationMon
     private WindowLifecycleControl mWindowLifecycleControl;
     /** 自定义拖动处理 */
     @Nullable
-    private AbstractWindowDraggableRule mWindowDraggableRule;
+    private IWindowDraggableRule mWindowDraggableRule;
     /** 窗口生命周期回调 */
     @Nullable
     private OnWindowLifecycleCallback mOnWindowLifecycleCallback;
@@ -642,10 +642,10 @@ public class EasyWindow<X extends EasyWindow<?>> implements ScreenOrientationMon
      * {@link MovingWindowDraggableRule}：悬浮窗随着手指移动而移动的拖拽规则
      * {@link SpringBackWindowDraggableRule }：在 MovingWindowDraggableRule 的基础上，加上了在手指释放时触发回弹到边缘的动画
      */
-    public X setWindowDraggableRule(@Nullable AbstractWindowDraggableRule windowDraggableRule) {
+    public X setWindowDraggableRule(@Nullable IWindowDraggableRule windowDraggableRule) {
         if (windowDraggableRule == null) {
             if (mWindowDraggableRule != null) {
-                mWindowDraggableRule.recycle();
+                mWindowDraggableRule.stop();
                 mWindowDraggableRule = null;
             }
 
@@ -1060,7 +1060,7 @@ public class EasyWindow<X extends EasyWindow<?>> implements ScreenOrientationMon
             mWindowLifecycleControl = null;
         }
         if (mWindowDraggableRule != null) {
-            mWindowDraggableRule.recycle();
+            mWindowDraggableRule.stop();
             mWindowDraggableRule = null;
         }
         mContext = null;
@@ -1143,7 +1143,7 @@ public class EasyWindow<X extends EasyWindow<?>> implements ScreenOrientationMon
      * 设置悬浮窗拖拽规则（可能为空）
      */
     @Nullable
-    public AbstractWindowDraggableRule getWindowDraggableRule() {
+    public IWindowDraggableRule getWindowDraggableRule() {
         return mWindowDraggableRule;
     }
 

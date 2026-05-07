@@ -12,7 +12,7 @@ import com.hjq.window.EasyWindow;
  *    time   : 2019/01/04
  *    desc   : 移动拖拽处理实现类
  */
-public class MovingWindowDraggableRule extends AbstractWindowDraggableRule {
+public class MovingWindowDraggableRule extends BaseWindowDraggableRule {
 
     /** 手指按下的坐标 */
     private float mViewDownX;
@@ -20,6 +20,11 @@ public class MovingWindowDraggableRule extends AbstractWindowDraggableRule {
 
     /** 触摸移动标记 */
     private boolean mTouchMoving;
+
+    @Override
+    public boolean isTouchMoving() {
+        return mTouchMoving;
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -49,17 +54,17 @@ public class MovingWindowDraggableRule extends AbstractWindowDraggableRule {
                 updateLocation(newX, newY);
 
                 if (mTouchMoving) {
-                    dispatchRunningDraggingCallback();
+                    dispatchDraggingRunningCallback();
                 } else if (isFingerMove(mViewDownX, event.getX(), mViewDownY, event.getY())) {
                     // 如果用户移动了手指，那么就拦截本次触摸事件，从而不让点击事件生效
                     mTouchMoving = true;
-                    dispatchStartDraggingCallback();
+                    dispatchDraggingStartCallback();
                 }
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
                 if (mTouchMoving) {
-                    dispatchStopDraggingCallback();
+                    dispatchDraggingStopCallback();
                 }
                 try {
                     return mTouchMoving;
@@ -70,14 +75,6 @@ public class MovingWindowDraggableRule extends AbstractWindowDraggableRule {
             default:
                 break;
         }
-        return mTouchMoving;
-    }
-
-    /**
-     * 当前是否处于触摸移动状态
-     */
-    @Override
-    public boolean isTouchMoving() {
         return mTouchMoving;
     }
 }

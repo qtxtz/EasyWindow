@@ -40,10 +40,10 @@ import com.hjq.window.OnWindowViewKeyListener;
 import com.hjq.window.OnWindowViewLongClickListener;
 import com.hjq.window.demo.DemoAdapter.OnItemClickListener;
 import com.hjq.window.demo.DemoAdapter.OnItemLongClickListener;
-import com.hjq.window.draggable.AbstractWindowDraggableRule.OnWindowDraggingListener;
 import com.hjq.window.draggable.MovingWindowDraggableRule;
 import com.hjq.window.draggable.SpringBackWindowDraggableRule;
-import com.hjq.window.draggable.SpringBackWindowDraggableRule.SpringBackAnimCallback;
+import com.hjq.window.draggable.callback.OnSpringBackAnimCallback;
+import com.hjq.window.draggable.callback.OnWindowDraggingCallback;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -445,7 +445,7 @@ public final class MainActivity extends AppCompatActivity implements View.OnClic
         SpringBackWindowDraggableRule springBackWindowDraggableRule = new SpringBackWindowDraggableRule(
             SpringBackWindowDraggableRule.ORIENTATION_HORIZONTAL);
         springBackWindowDraggableRule.setAllowMoveToScreenSafeArea(false);
-        springBackWindowDraggableRule.setSpringBackAnimCallback(new SpringBackAnimCallback() {
+        springBackWindowDraggableRule.setOnSpringBackAnimCallback(new OnSpringBackAnimCallback() {
 
             @Override
             public void onSpringBackAnimationStart(@NonNull EasyWindow<?> easyWindow, @NonNull Animator animator) {
@@ -457,7 +457,7 @@ public final class MainActivity extends AppCompatActivity implements View.OnClic
                 Log.i(TAG, "onSpringBackAnimationEnd");
             }
         });
-        springBackWindowDraggableRule.setWindowDraggingListener(new OnWindowDraggingListener() {
+        springBackWindowDraggableRule.setOnWindowDraggingCallback(new OnWindowDraggingCallback() {
 
             @Override
             public void onWindowDraggingStart(@NonNull EasyWindow<?> easyWindow) {

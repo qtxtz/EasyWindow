@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.hjq.window.EasyWindow;
+import com.hjq.window.draggable.callback.OnSpringBackAnimCallback;
 
 /**
  *    author : Android 轮子哥
@@ -18,7 +19,7 @@ import com.hjq.window.EasyWindow;
  *    time   : 2019/01/04
  *    desc   : 拖拽后回弹处理实现类
  */
-public class SpringBackWindowDraggableRule extends AbstractWindowDraggableRule {
+public class SpringBackWindowDraggableRule extends BaseWindowDraggableRule {
 
     /** 水平方向回弹 */
     public static final int ORIENTATION_HORIZONTAL = LinearLayout.HORIZONTAL;
@@ -37,7 +38,7 @@ public class SpringBackWindowDraggableRule extends AbstractWindowDraggableRule {
 
     /** 拖拽回弹动画监听 */
     @Nullable
-    private SpringBackAnimCallback mSpringBackAnimCallback;
+    private OnSpringBackAnimCallback mOnSpringBackAnimCallback;
 
     public SpringBackWindowDraggableRule() {
         this(ORIENTATION_HORIZONTAL);
@@ -52,6 +53,11 @@ public class SpringBackWindowDraggableRule extends AbstractWindowDraggableRule {
             default:
                 throw new IllegalArgumentException("You cannot pass in directions other than horizontal or vertical");
         }
+    }
+
+    @Override
+    public boolean isTouchMoving() {
+        return mTouchMoving;
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -82,17 +88,17 @@ public class SpringBackWindowDraggableRule extends AbstractWindowDraggableRule {
                 updateLocation(newX, newY);
 
                 if (mTouchMoving) {
-                    dispatchRunningDraggingCallback();
+                    dispatchDraggingRunningCallback();
                 } else if (isFingerMove(mViewDownX, event.getX(), mViewDownY, event.getY())) {
                     // 如果用户移动了手指，那么就拦截本次触摸事件，从而不让点击事件生效
                     mTouchMoving = true;
-                    dispatchStartDraggingCallback();
+                    dispatchDraggingStartCallback();
                 }
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
                 if (mTouchMoving) {
-                    dispatchStopDraggingCallback();
+                    dispatchDraggingStopCallback();
                     dispatchSpringBackViewToScreenEdge(event.getRawX(), event.getRawY());
                 }
                 try {
@@ -251,8 +257,8 @@ public class SpringBackWindowDraggableRule extends AbstractWindowDraggableRule {
     /**
      * 设置拖拽回弹回调
      */
-    public void setSpringBackAnimCallback(@Nullable SpringBackAnimCallback callback) {
-        mSpringBackAnimCallback = callback;
+    public void setOnSpringBackAnimCallback(@Nullable OnSpringBackAnimCallback callback) {
+        mOnSpringBackAnimCallback = callback;
     }
 
     /**
@@ -264,10 +270,10 @@ public class SpringBackWindowDraggableRule extends AbstractWindowDraggableRule {
         if (easyWindow == null) {
             return;
         }
-        if (mSpringBackAnimCallback == null) {
+        if (mOnSpringBackAnimCallback == null) {
             return;
         }
-        mSpringBackAnimCallback.onSpringBackAnimationStart(easyWindow, animator);
+        mOnSpringBackAnimCallback.onSpringBackAnimationStart(easyWindow, animator);
     }
 
     /**
@@ -279,34 +285,9 @@ public class SpringBackWindowDraggableRule extends AbstractWindowDraggableRule {
         if (easyWindow == null) {
             return;
         }
-        if (mSpringBackAnimCallback == null) {
+        if (mOnSpringBackAnimCallback == null) {
             return;
         }
-        mSpringBackAnimCallback.onSpringBackAnimationEnd(easyWindow, animator);
-    }
-
-    /**
-     * 当前是否处于触摸移动状态
-     */
-    @Override
-    public boolean isTouchMoving() {
-        return mTouchMoving;
-    }
-
-    public interface SpringBackAnimCallback {
-
-        /**
-         * 回弹动画开始执行
-         */
-        default void onSpringBackAnimationStart(@NonNull EasyWindow<?> easyWindow, @NonNull Animator animator) {
-            // default implementation ignored
-        }
-
-        /**
-         * 回弹动画结束执行
-         */
-        default void onSpringBackAnimationEnd(@NonNull EasyWindow<?> easyWindow, @NonNull Animator animator) {
-            // default implementation ignored
-        }
+        mOnSpringBackAnimCallback.onSpringBackAnimationEnd(easyWindow, animator);
     }
 }
