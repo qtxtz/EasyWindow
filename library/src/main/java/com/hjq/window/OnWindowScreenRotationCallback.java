@@ -10,6 +10,12 @@ import androidx.annotation.NonNull;
  */
 public interface OnWindowScreenRotationCallback {
 
+    /** 屏幕旋转缓冲时间 */
+    long SCREEN_ROTATION_BUFFER_TIME = 100;
+
+    /** 屏幕旋转后回调时间 */
+    long SCREEN_ROTATION_AFTER_TIME = SCREEN_ROTATION_BUFFER_TIME + 10;
+
     /**
      * 窗口屏幕旋转前
      * @param screenOrientation     屏幕方向类型，有两种类型：

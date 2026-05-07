@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 import com.hjq.window.EasyWindow;
+import com.hjq.window.OnWindowScreenRotationCallback;
 
 /**
  *    author : Android 轮子哥
@@ -42,9 +43,6 @@ import com.hjq.window.EasyWindow;
  *    desc   : 拖拽抽象类
  */
 public abstract class AbstractWindowDraggableRule implements OnTouchListener {
-
-    /** 屏幕旋转缓冲时间 */
-    public static final long SCREEN_ROTATION_BUFFER_TIME = 100;
 
     @Nullable
     private EasyWindow<?> mEasyWindow;
@@ -360,7 +358,7 @@ public abstract class AbstractWindowDraggableRule implements OnTouchListener {
             easyWindow.sendTask(() -> {
                 refreshWindowInfo();
                 refreshScreenPhysicalSize();
-            }, SCREEN_ROTATION_BUFFER_TIME);
+            }, OnWindowScreenRotationCallback.SCREEN_ROTATION_BUFFER_TIME);
             return;
         }
 
@@ -436,7 +434,7 @@ public abstract class AbstractWindowDraggableRule implements OnTouchListener {
             // Log.i(getClass().getSimpleName(), "屏幕旋转后 newViewOnScreenX = " + newViewOnScreenX + "，newViewOnScreenY = " + newViewOnScreenY);
             updateLocation(newViewOnScreenX, newViewOnScreenY);
 
-        }, SCREEN_ROTATION_BUFFER_TIME);
+        }, OnWindowScreenRotationCallback.SCREEN_ROTATION_BUFFER_TIME);
     }
 
     /**

@@ -1541,6 +1541,6 @@ public class EasyWindow<X extends EasyWindow<?>> implements ScreenOrientationMon
             if (mOnWindowScreenRotationCallback != null) {
                 mOnWindowScreenRotationCallback.onWindowScreenRotationAfter(this, newOrientation);
             }
-        }, AbstractWindowDraggableRule.SCREEN_ROTATION_BUFFER_TIME + 10);
+        }, OnWindowScreenRotationCallback.SCREEN_ROTATION_AFTER_TIME);
     }
 }
