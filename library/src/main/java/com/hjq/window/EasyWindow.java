@@ -503,35 +503,6 @@ public class EasyWindow<X extends EasyWindow<?>> implements ScreenOrientationMon
     }
 
     /**
-     * 设置挖孔屏下的显示模式
-     *
-     * {@link WindowManager.LayoutParams#LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT}：默认模式
-     * {@link WindowManager.LayoutParams#LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES}：内容会延伸至屏幕短边的挖孔区域
-     * {@link WindowManager.LayoutParams#LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER}：内容不会延伸到挖孔区域
-     * {@link WindowManager.LayoutParams#LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS}：内容会延伸到挖孔区域
-     *
-     * 文档地址：https://developer.android.com/develop/ui/views/layout/display-cutout?hl=zh-cn
-     */
-    public X setLayoutInDisplayCutoutMode(int layoutInDisplayCutoutMode) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            mWindowParams.layoutInDisplayCutoutMode = layoutInDisplayCutoutMode;
-            delayUpdate();
-        }
-        return (X) this;
-    }
-
-    /**
-     * 设置悬浮窗在哪个显示屏上显示
-     */
-    public X setPreferredDisplayModeId(int preferredDisplayModeId) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mWindowParams.preferredDisplayModeId = preferredDisplayModeId;
-            delayUpdate();
-        }
-        return (X) this;
-    }
-
-    /**
      * 设置悬浮窗标题
      */
     public X setWindowTitle(@Nullable CharSequence title) {
@@ -574,7 +545,20 @@ public class EasyWindow<X extends EasyWindow<?>> implements ScreenOrientationMon
     }
 
     /**
-     * 设置悬浮窗的刷新率
+     * 设置悬浮窗屏幕方向
+     *
+     * 自适应：{@link ActivityInfo#SCREEN_ORIENTATION_UNSPECIFIED}
+     * 横屏：{@link ActivityInfo#SCREEN_ORIENTATION_LANDSCAPE}
+     * 竖屏：{@link ActivityInfo#SCREEN_ORIENTATION_PORTRAIT}
+     */
+    public X setScreenOrientation(int screenOrientation) {
+        mWindowParams.screenOrientation = screenOrientation;
+        delayUpdate();
+        return (X) this;
+    }
+
+    /**
+     * 设置悬浮窗的刷新率（Android 5.0 及以上才支持）
      */
     public X setPreferredRefreshRate(float preferredRefreshRate) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -585,7 +569,18 @@ public class EasyWindow<X extends EasyWindow<?>> implements ScreenOrientationMon
     }
 
     /**
-     * 设置悬浮窗的颜色模式
+     * 设置悬浮窗在哪个显示屏上显示（Android 6.0 及以上才支持）
+     */
+    public X setPreferredDisplayModeId(int preferredDisplayModeId) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mWindowParams.preferredDisplayModeId = preferredDisplayModeId;
+            delayUpdate();
+        }
+        return (X) this;
+    }
+
+    /**
+     * 设置悬浮窗的颜色模式（Android 8.0 及以上才支持）
      */
     public X setColorMode(int colorMode) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -596,15 +591,20 @@ public class EasyWindow<X extends EasyWindow<?>> implements ScreenOrientationMon
     }
 
     /**
-     * 设置悬浮窗屏幕方向
+     * 设置挖孔屏下的显示模式（Android 9.0 及以上才支持）
      *
-     * 自适应：{@link ActivityInfo#SCREEN_ORIENTATION_UNSPECIFIED}
-     * 横屏：{@link ActivityInfo#SCREEN_ORIENTATION_LANDSCAPE}
-     * 竖屏：{@link ActivityInfo#SCREEN_ORIENTATION_PORTRAIT}
+     * {@link WindowManager.LayoutParams#LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT}：默认模式
+     * {@link WindowManager.LayoutParams#LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES}：内容会延伸至屏幕短边的挖孔区域
+     * {@link WindowManager.LayoutParams#LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER}：内容不会延伸到挖孔区域
+     * {@link WindowManager.LayoutParams#LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS}：内容会延伸到挖孔区域
+     *
+     * 文档地址：https://developer.android.com/develop/ui/views/layout/display-cutout?hl=zh-cn
      */
-    public X setScreenOrientation(int screenOrientation) {
-        mWindowParams.screenOrientation = screenOrientation;
-        delayUpdate();
+    public X setLayoutInDisplayCutoutMode(int layoutInDisplayCutoutMode) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            mWindowParams.layoutInDisplayCutoutMode = layoutInDisplayCutoutMode;
+            delayUpdate();
+        }
         return (X) this;
     }
 

@@ -277,22 +277,23 @@ easyWindow.setBitmapFormat(int format);
 easyWindow.setSystemUiVisibility(int systemUiVisibility);
 // 设置垂直权重
 easyWindow.setVerticalWeight(float verticalWeight);
-// 设置挖孔屏下的显示模式
-easyWindow.setLayoutInDisplayCutoutMode(int layoutInDisplayCutoutMode);
-// 设置悬浮窗在哪个显示屏上显示
-easyWindow.setPreferredDisplayModeId(int preferredDisplayModeId);
 // 设置悬浮窗标题
 easyWindow.setWindowTitle(@Nullable CharSequence title);
 // 设置屏幕的亮度
 easyWindow.setScreenBrightness(@FloatRange(from = -1.0, to = 1.0) float screenBrightness);
 // 设置键盘背光的亮度
 easyWindow.setButtonBrightness(@FloatRange(from = -1.0, to = 1.0) float buttonBrightness);
-// 设置悬浮窗的刷新率
-easyWindow.setPreferredRefreshRate(float preferredRefreshRate);
-// 设置悬浮窗的颜色模式
-easyWindow.setColorMode(int colorMode);
 // 设置悬浮窗屏幕方向
 easyWindow.setScreenOrientation(int screenOrientation);
+
+// 设置悬浮窗的刷新率（Android 5.0 及以上才支持）
+easyWindow.setPreferredRefreshRate(float preferredRefreshRate);
+// 设置悬浮窗在哪个显示屏上显示（Android 6.0 及以上才支持）
+easyWindow.setPreferredDisplayModeId(int preferredDisplayModeId);
+// 设置悬浮窗的颜色模式（Android 8.0 及以上才支持）
+easyWindow.setColorMode(int colorMode);
+// 设置挖孔屏下的显示模式（Android 9.0 及以上才支持）
+easyWindow.setLayoutInDisplayCutoutMode(int layoutInDisplayCutoutMode);
 // 设置悬浮窗画面低延迟开关（Android 11 及以上才支持）
 easyWindow.setPreferMinimalPostProcessing(boolean enabled);
 // 设置悬浮窗背后的高斯模糊半径大小（Android 12 及以上才支持）

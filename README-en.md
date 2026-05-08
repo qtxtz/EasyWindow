@@ -271,22 +271,23 @@ easyWindow.setBitmapFormat(int format);
 easyWindow.setSystemUiVisibility(int systemUiVisibility);
 // Set vertical weight
 easyWindow.setVerticalWeight(float verticalWeight);
-// Set display mode for cutout (notch) screens
-easyWindow.setLayoutInDisplayCutoutMode(int layoutInDisplayCutoutMode);
-// Specify which display to show the floating window on
-easyWindow.setPreferredDisplayModeId(int preferredDisplayModeId);
 // Set the window title
 easyWindow.setWindowTitle(@Nullable CharSequence title);
 // Set screen brightness
 easyWindow.setScreenBrightness(@FloatRange(from = -1.0, to = 1.0) float screenBrightness);
 // Set button backlight brightness
 easyWindow.setButtonBrightness(@FloatRange(from = -1.0, to = 1.0) float buttonBrightness);
-// Set preferred refresh rate
-easyWindow.setPreferredRefreshRate(float preferredRefreshRate);
-// Set color mode
-easyWindow.setColorMode(int colorMode);
 // Set screen orientation for the floating window
 easyWindow.setScreenOrientation(int screenOrientation);
+
+// Set preferred refresh rate (supported on Android 5.0+)
+easyWindow.setPreferredRefreshRate(float preferredRefreshRate);
+// Specify which display to show the floating window on (supported on Android 6.0+)
+easyWindow.setPreferredDisplayModeId(int preferredDisplayModeId);
+// Set color mode (supported on Android 8.0+)
+easyWindow.setColorMode(int colorMode);
+// Set display mode for cutout (notch) screens (supported on Android 9.0+)
+easyWindow.setLayoutInDisplayCutoutMode(int layoutInDisplayCutoutMode);
 // Set low latency mode for the window (supported on Android 11+)
 easyWindow.setPreferMinimalPostProcessing(boolean enabled);
 // Set blur radius behind the window (supported on Android 12+)
