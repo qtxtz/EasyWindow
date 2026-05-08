@@ -253,7 +253,7 @@ public interface IWindowDraggableAuxiliary {
     }
 
     /**
-     * 计算空余空间的比例
+     * 计算留白大小比例
      *
      * @param gapSize        空余空间的大小
      * @param totalSize      总空间的大小
@@ -263,16 +263,25 @@ public interface IWindowDraggableAuxiliary {
         if (totalSize <= 0) {
             return 0.5f;
         }
-        float ratio = gapSize / totalSize;
+
+        final float ratio = gapSize / totalSize;
+
         if (ratio > 0.99f) {
             // 如果比例超过了 99%，就认为它已经贴边了，直接放在边缘位置
             return 1f;
-        } else if (ratio < 0.01f) {
+        }
+
+        if (ratio < 0.01f) {
             // 如果比例小于了 1%，就认为它已经贴边了，直接放在边缘位置
             return 0f;
-        } else {
-            // 正常情况，返回计算的比例
-            return ratio;
         }
+
+        if (ratio > 0.49f && ratio < 0.51f) {
+            // 如果比例在 49% ~ 51%，就认为它已经居中了，直接放在中间位置
+            return 0.5f;
+        }
+
+        // 正常情况，返回计算的比例
+        return ratio;
     }
 }
