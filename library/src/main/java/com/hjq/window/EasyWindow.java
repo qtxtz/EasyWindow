@@ -596,6 +596,54 @@ public class EasyWindow<X extends EasyWindow<?>> implements ScreenOrientationMon
     }
 
     /**
+     * 设置悬浮窗屏幕方向
+     *
+     * 自适应：{@link ActivityInfo#SCREEN_ORIENTATION_UNSPECIFIED}
+     * 横屏：{@link ActivityInfo#SCREEN_ORIENTATION_LANDSCAPE}
+     * 竖屏：{@link ActivityInfo#SCREEN_ORIENTATION_PORTRAIT}
+     */
+    public X setScreenOrientation(int screenOrientation) {
+        mWindowParams.screenOrientation = screenOrientation;
+        delayUpdate();
+        return (X) this;
+    }
+
+    /**
+     * 设置悬浮窗画面低延迟开关（Android 11 及以上才支持）
+     *
+     * 这个 API 就是让你的 App（比如游戏、视频会议）告诉手机 / 电视：
+     * “我要最低延迟，别搞那些花里胡哨的画质处理！”，
+     * 让设备把多余的画面后期处理关掉，优先保证操作和画面的响应速度。
+     *
+     * 1. 设备本身的 “坏习惯”：
+     *    现在的手机、电视 / 显示器，为了让你看视频、图片的画质更好，会偷偷给画面做 “后期处理”，比如锐化、降噪、色彩增强、运动补偿……
+     *    这些处理会让画面更好看，但都要花时间，结果就是你点一下屏幕、按一下手柄，画面要等几十毫秒才反应过来，这就是 “延迟”。
+     *
+     * 2. 游戏 / 视频会议的痛点：
+     *    玩游戏时：你按了攻击键，结果半秒后角色才挥刀，就很容易输。
+     *    视频会议时：你说话，对方的嘴型过了一会儿才对上，体验很差。
+     *    这些场景里，“快” 比 “画质好” 重要得多。
+     *
+     * 3. 这个 API 的作用
+     *    当你调用 setPreferMinimalPostProcessing(true) 时，就是在给设备发信号：
+     *    “我这个 App 现在很需要低延迟，麻烦把那些画质增强的后期处理都关了！
+     *    如果你的显示器 / 电视支持 HDMI 2.1 的 ALLM（自动低延迟模式，也就是常说的游戏模式），也帮我把它打开！”
+     *
+     * 4. 为什么还有限制？
+     *    它不是 100% 生效的，有两个 “无效场景”：
+     *    你的设备 / 外接显示器根本不支持这个功能（比如老电视、非 HDMI 2.1 的设备）。
+     *    用户自己在系统设置里手动关掉了 “低延迟 / 游戏模式” 的开关。
+     *    这时候你调用这个 API，设备会直接无视你的请求，还是按原来的方式处理画面。
+     */
+    public X setPreferMinimalPostProcessing(boolean enabled) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            mWindowParams.preferMinimalPostProcessing = enabled;
+            delayUpdate();
+        }
+        return (X) this;
+    }
+
+    /**
      * 设置悬浮窗背后的高斯模糊半径大小（Android 12 及以上才支持）
      *
      * @param blurBehindRadius          高斯模糊半径大小（以像素为单位）
@@ -609,19 +657,6 @@ public class EasyWindow<X extends EasyWindow<?>> implements ScreenOrientationMon
             }
             delayUpdate();
         }
-        return (X) this;
-    }
-
-    /**
-     * 设置悬浮窗屏幕方向
-     *
-     * 自适应：{@link ActivityInfo#SCREEN_ORIENTATION_UNSPECIFIED}
-     * 横屏：{@link ActivityInfo#SCREEN_ORIENTATION_LANDSCAPE}
-     * 竖屏：{@link ActivityInfo#SCREEN_ORIENTATION_PORTRAIT}
-     */
-    public X setScreenOrientation(int screenOrientation) {
-        mWindowParams.screenOrientation = screenOrientation;
-        delayUpdate();
         return (X) this;
     }
 

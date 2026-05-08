@@ -291,10 +291,12 @@ easyWindow.setButtonBrightness(@FloatRange(from = -1.0, to = 1.0) float buttonBr
 easyWindow.setPreferredRefreshRate(float preferredRefreshRate);
 // 设置悬浮窗的颜色模式
 easyWindow.setColorMode(int colorMode);
-// 设置悬浮窗背后的高斯模糊半径大小（Android 12 及以上才支持）
-easyWindow.setBlurBehindRadius(@IntRange(from = 0) int blurBehindRadius);
 // 设置悬浮窗屏幕方向
 easyWindow.setScreenOrientation(int screenOrientation);
+// 设置悬浮窗画面低延迟开关（Android 11 及以上才支持）
+easyWindow.setPreferMinimalPostProcessing(boolean enabled);
+// 设置悬浮窗背后的高斯模糊半径大小（Android 12 及以上才支持）
+easyWindow.setBlurBehindRadius(@IntRange(from = 0) int blurBehindRadius);
 
 // 设置悬浮窗可见性
 easyWindow.setWindowViewVisibility(int visibility);

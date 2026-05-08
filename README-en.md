@@ -285,10 +285,12 @@ easyWindow.setButtonBrightness(@FloatRange(from = -1.0, to = 1.0) float buttonBr
 easyWindow.setPreferredRefreshRate(float preferredRefreshRate);
 // Set color mode
 easyWindow.setColorMode(int colorMode);
-// Set blur radius behind the window (supported on Android 12+)
-easyWindow.setBlurBehindRadius(@IntRange(from = 0) int blurBehindRadius);
 // Set screen orientation for the floating window
 easyWindow.setScreenOrientation(int screenOrientation);
+// Set low latency mode for the window (supported on Android 11+)
+easyWindow.setPreferMinimalPostProcessing(boolean enabled);
+// Set blur radius behind the window (supported on Android 12+)
+easyWindow.setBlurBehindRadius(@IntRange(from = 0) int blurBehindRadius);
 
 // Set the visibility of the window view
 easyWindow.setWindowViewVisibility(int visibility);
