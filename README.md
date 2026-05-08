@@ -286,6 +286,8 @@ easyWindow.setButtonBrightness(@FloatRange(from = -1.0, to = 1.0) float buttonBr
 // 设置悬浮窗屏幕方向
 easyWindow.setScreenOrientation(int screenOrientation);
 
+// 设置窗口旋转动画（Android 4.3 及以上才支持）
+easyWindow.setRotationAnimation(int rotationAnimation);
 // 设置悬浮窗的刷新率（Android 5.0 及以上才支持）
 easyWindow.setPreferredRefreshRate(float preferredRefreshRate);
 // 设置悬浮窗在哪个显示屏上显示（Android 6.0 及以上才支持）

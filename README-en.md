@@ -280,6 +280,8 @@ easyWindow.setButtonBrightness(@FloatRange(from = -1.0, to = 1.0) float buttonBr
 // Set screen orientation for the floating window
 easyWindow.setScreenOrientation(int screenOrientation);
 
+// Set the rotation animation of the window (supported on Android 4.3+)
+easyWindow.setRotationAnimation(int rotationAnimation);
 // Set preferred refresh rate (supported on Android 5.0+)
 easyWindow.setPreferredRefreshRate(float preferredRefreshRate);
 // Specify which display to show the floating window on (supported on Android 6.0+)

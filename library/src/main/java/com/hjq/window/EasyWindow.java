@@ -558,6 +558,27 @@ public class EasyWindow<X extends EasyWindow<?>> implements ScreenOrientationMon
     }
 
     /**
+     * 设置窗口旋转动画
+     *
+     * 仅对最顶层不透明的进入和退出窗口设置了 {@link WindowManager.LayoutParams#FLAG_FULLSCREEN} 位且未被其他窗口遮挡的情况有效。
+     * 其他情况下，将使用默认行为 {@link WindowManager.LayoutParams#ROTATION_ANIMATION_ROTATE}
+     *
+     * {@link WindowManager.LayoutParams#ROTATION_ANIMATION_ROTATE}：指定该窗口在旋转后视觉上会旋转进出。
+     * {@link WindowManager.LayoutParams##ROTATION_ANIMATION_CROSSFADE}：指定该窗口在旋转后会渐入或渐出。
+     * {@link WindowManager.LayoutParams##ROTATION_ANIMATION_JUMPCUT}：指定该窗口旋转后立即消失或出现。
+     * {@link WindowManager.LayoutParams##ROTATION_ANIMATION_SEAMLESS}：用来指定无缝旋转模式的值 rotationAnimation ，这类似于跳剪，
+     * 但如果无法在不暂停屏幕的情况下应用旋转，它会退回到交叉淡入淡出。例如，这非常适合那些不希望取景器内容旋转或淡出（而是希望无缝衔接），
+     * 但又不想在应用切换场景中出现 ROTATION_ANIMATION_JUMPCUT，无法无缝旋转的相机应用。
+     */
+    public X setRotationAnimation(int rotationAnimation) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            mWindowParams.rotationAnimation = rotationAnimation;
+        }
+        delayUpdate();
+        return (X) this;
+    }
+
+    /**
      * 设置悬浮窗的刷新率（Android 5.0 及以上才支持）
      */
     public X setPreferredRefreshRate(float preferredRefreshRate) {
