@@ -14,7 +14,7 @@ import com.hjq.window.draggable.callback.OnWindowDraggingCallback;
  *    time   : 2026/05/07
  *    desc   : 窗口拖拽规则接口
  */
-public interface IWindowDraggableRule extends IWindowInfoGet, IWindowAuxiliary {
+public interface IWindowDraggableRule extends IWindowDraggableInfo, IWindowDraggableAuxiliary {
 
     /**
      * 开启拖拽，窗口显示后回调这个方法

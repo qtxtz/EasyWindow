@@ -31,7 +31,7 @@ import com.hjq.window.EasyWindow;
  *    time   : 2026/05/07
  *    desc   : 窗口辅助接口
  */
-public interface IWindowAuxiliary {
+public interface IWindowDraggableAuxiliary {
 
     /**
      * 判断用户手指是否移动了，判断标准以下：

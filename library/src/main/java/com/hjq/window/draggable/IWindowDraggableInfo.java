@@ -10,7 +10,7 @@ import com.hjq.window.EasyWindow;
  *    time   : 2026/05/07
  *    desc   : 窗口信息配置接口
  */
-public interface IWindowInfoGet {
+public interface IWindowDraggableInfo {
 
     @Nullable
     EasyWindow<?> getEasyWindow();
