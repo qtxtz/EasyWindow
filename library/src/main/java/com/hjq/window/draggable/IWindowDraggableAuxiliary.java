@@ -3,15 +3,21 @@ package com.hjq.window.draggable;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Build;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.Display;
 import android.view.DisplayCutout;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowInsets;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -283,5 +289,38 @@ public interface IWindowDraggableAuxiliary {
 
         // 正常情况，返回计算的比例
         return ratio;
+    }
+
+    /**
+     * 获取当前屏幕的物理尺寸
+     */
+    @SuppressWarnings("deprecation")
+    default double getScreenPhysicalSize(@Nullable EasyWindow<?> easyWindow) {
+        if (easyWindow == null) {
+            return 0;
+        }
+        WindowManager windowManager = easyWindow.getWindowManager();
+        Display defaultDisplay = windowManager.getDefaultDisplay();
+        if (defaultDisplay == null) {
+            return 0;
+        }
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        defaultDisplay.getMetrics(metrics);
+
+        float screenWidthInInches;
+        float screenHeightInInches;
+        if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1) {
+            Point point = new Point();
+            defaultDisplay.getRealSize(point);
+            screenWidthInInches = point.x / metrics.xdpi;
+            screenHeightInInches = point.y / metrics.ydpi;
+        } else {
+            screenWidthInInches = metrics.widthPixels / metrics.xdpi;
+            screenHeightInInches = metrics.heightPixels / metrics.ydpi;
+        }
+
+        // 勾股定理：直角三角形的两条直角边的平方和等于斜边的平方
+        return Math.sqrt(Math.pow(screenWidthInInches, 2) + Math.pow(screenHeightInInches, 2));
     }
 }

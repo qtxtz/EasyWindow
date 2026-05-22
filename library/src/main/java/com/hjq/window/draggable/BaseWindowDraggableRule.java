@@ -3,13 +3,8 @@ package com.hjq.window.draggable;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Build;
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
-import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -459,32 +454,7 @@ public abstract class BaseWindowDraggableRule implements IWindowDraggableRule, O
      */
     @SuppressWarnings("deprecation")
     public void refreshScreenPhysicalSize() {
-        if (mEasyWindow == null) {
-            return;
-        }
-
-        WindowManager windowManager = mEasyWindow.getWindowManager();
-        Display defaultDisplay = windowManager.getDefaultDisplay();
-        if (defaultDisplay == null) {
-            return;
-        }
-
-        DisplayMetrics metrics = new DisplayMetrics();
-        defaultDisplay.getMetrics(metrics);
-
-        float screenWidthInInches;
-        float screenHeightInInches;
-        if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1) {
-            Point point = new Point();
-            defaultDisplay.getRealSize(point);
-            screenWidthInInches = point.x / metrics.xdpi;
-            screenHeightInInches = point.y / metrics.ydpi;
-        } else {
-            screenWidthInInches = metrics.widthPixels / metrics.xdpi;
-            screenHeightInInches = metrics.heightPixels / metrics.ydpi;
-        }
-
         // 勾股定理：直角三角形的两条直角边的平方和等于斜边的平方
-        mScreenPhysicalSize = Math.sqrt(Math.pow(screenWidthInInches, 2) + Math.pow(screenHeightInInches, 2));
+        mScreenPhysicalSize = getScreenPhysicalSize(mEasyWindow);
     }
 }
