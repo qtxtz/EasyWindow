@@ -16,86 +16,86 @@ import java.lang.ref.WeakReference;
  */
 final class ScreenOrientationMonitor implements ComponentCallbacks {
 
-   /** 当前屏幕的方向 */
-   private int mScreenOrientation;
+    /** 当前屏幕的方向 */
+    private int mScreenOrientation;
 
-   /** 屏幕旋转回调 */
-   @Nullable
-   private Reference<OnScreenOrientationCallback> mCallbackReference;
+    /** 屏幕旋转回调 */
+    @Nullable
+    private Reference<OnScreenOrientationCallback> mCallbackReference;
 
-   public ScreenOrientationMonitor(int screenOrientation) {
-      mScreenOrientation = screenOrientation;
-   }
+    public ScreenOrientationMonitor(int screenOrientation) {
+        mScreenOrientation = screenOrientation;
+    }
 
-   /**
-    * 注册监听
-    */
-   void registerCallback(@Nullable Context context, @Nullable OnScreenOrientationCallback callback) {
-      if (context == null) {
-         return;
-      }
-      if (callback == null) {
-         unregisterCallback(context);
-         return;
-      }
-      Context applicationContext = context.getApplicationContext();
-      if (applicationContext != null) {
-         applicationContext.registerComponentCallbacks(this);
-      }
-      mCallbackReference = new WeakReference<>(callback);
-   }
+    /**
+     * 注册监听
+     */
+    void registerCallback(@Nullable Context context, @Nullable OnScreenOrientationCallback callback) {
+        if (context == null) {
+            return;
+        }
+        if (callback == null) {
+            unregisterCallback(context);
+            return;
+        }
+        Context applicationContext = context.getApplicationContext();
+        if (applicationContext != null) {
+            applicationContext.registerComponentCallbacks(this);
+        }
+        mCallbackReference = new WeakReference<>(callback);
+    }
 
-   /**
-    * 取消监听
-    */
-   void unregisterCallback(@Nullable Context context) {
-      if (context == null) {
-          return;
-      }
-      Context applicationContext = context.getApplicationContext();
-      if (applicationContext != null) {
-         applicationContext.unregisterComponentCallbacks(this);
-      }
-      if (mCallbackReference != null) {
-         mCallbackReference.clear();
-      }
-      mCallbackReference = null;
-   }
+    /**
+     * 取消监听
+     */
+    void unregisterCallback(@Nullable Context context) {
+        if (context == null) {
+            return;
+        }
+        Context applicationContext = context.getApplicationContext();
+        if (applicationContext != null) {
+            applicationContext.unregisterComponentCallbacks(this);
+        }
+        if (mCallbackReference != null) {
+            mCallbackReference.clear();
+        }
+        mCallbackReference = null;
+    }
 
-   @Override
-   public void onConfigurationChanged(@NonNull Configuration newConfig) {
-      if (mScreenOrientation == newConfig.orientation) {
-         return;
-      }
-      mScreenOrientation = newConfig.orientation;
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        if (mScreenOrientation == newConfig.orientation) {
+            return;
+        }
+        mScreenOrientation = newConfig.orientation;
 
-      if (mCallbackReference == null) {
-         return;
-      }
-      OnScreenOrientationCallback callback = mCallbackReference.get();
-      if (callback == null) {
-          return;
-      }
-      callback.onScreenOrientationChange(mScreenOrientation);
-   }
+        if (mCallbackReference == null) {
+            return;
+        }
+        OnScreenOrientationCallback callback = mCallbackReference.get();
+        if (callback == null) {
+            return;
+        }
+        callback.onScreenOrientationChange(mScreenOrientation);
+    }
 
-   @Override
-   public void onLowMemory() {
-      // default implementation ignored
-   }
+    @Override
+    public void onLowMemory() {
+        // default implementation ignored
+    }
 
-   /**
-    * 屏幕方向监听器
-    */
-   interface OnScreenOrientationCallback {
+    /**
+     * 屏幕方向监听器
+     */
+    interface OnScreenOrientationCallback {
 
-      /**
-       * 监听屏幕旋转了
-       *
-       * @param newOrientation         最新的屏幕方向
-       */
-      default void onScreenOrientationChange(int newOrientation) {
-          // default implementation ignored
-      }
-   }
+        /**
+         * 监听屏幕旋转了
+         *
+         * @param newOrientation         最新的屏幕方向
+         */
+        default void onScreenOrientationChange(int newOrientation) {
+            // default implementation ignored
+        }
+    }
 }
