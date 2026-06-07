@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
 
     defaultConfig {
         applicationId "com.hjq.window.demo"
         minSdkVersion 18
-        targetSdkVersion 28
+        targetSdkVersion 34
         versionCode 1560
         versionName "15.6"
     }
