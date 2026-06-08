@@ -43,6 +43,7 @@ import com.hjq.window.draggable.MovingWindowDraggableRule;
 import com.hjq.window.draggable.SpringBackWindowDraggableRule;
 import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Field;
 
 /**
  *    author : Android 轮子哥
@@ -677,6 +678,47 @@ public class EasyWindow<X extends EasyWindow<?>> implements ScreenOrientationMon
                 addWindowFlags(flag);
             }
             delayUpdate();
+        }
+        return (X) this;
+    }
+
+    /**
+     * 设置悬浮窗是否可以播放移动动画（Android 14 及以上才支持，框架兼容到 Android 4.3）
+     *
+     * @param enable            是否启用移动动画，系统默认为 true，设置为 false 可以让悬浮窗在移动时不播放动画，直接跳转到目标位置
+     */
+    @SuppressWarnings("JavaReflectionMemberAccess")
+    public X setCanPlayMoveAnimation(boolean enable) {
+        // 调用此方法可修复在 Android 13 ~ 14 当窗口内容大小改变时窗口位置会跳动的问题
+        // Github issue 地址：https://github.com/getActivity/EasyWindow/issues/83
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            mWindowParams.setCanPlayMoveAnimation(enable);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            // 查阅 Android 源码，发现 PRIVATE_FLAG_NO_MOVE_ANIMATION 是 从 Android 4.3 开始引入的，所以最低支持到 Android 4.3
+            // https://cs.android.com/android/platform/superproject/+/android-4.2.2_r1.2b:frameworks/base/core/java/android/view/WindowManager.java
+            // https://cs.android.com/android/platform/superproject/+/android-4.3.1_r1:frameworks/base/core/java/android/view/WindowManager.java
+            // 为了全 Android 版本的效果统一，Android 4.3 ~ Android 13 及以下通过私有标志反射实现
+            try {
+                Class<WindowManager.LayoutParams> layoutParamsClass = WindowManager.LayoutParams.class;
+
+                // 获取 privateFlags 字段
+                Field privateFlagsField = layoutParamsClass.getField("privateFlags");
+                // 获取 PRIVATE_FLAG_NO_MOVE_ANIMATION 标志值
+                Field noMoveAnimationFlagField = layoutParamsClass.getField("PRIVATE_FLAG_NO_MOVE_ANIMATION");
+                int noMoveAnimationFlag = noMoveAnimationFlagField.getInt(null);
+
+                // 将标志位设置到 privateFlags 中
+                int currentPrivateFlags = privateFlagsField.getInt(mWindowParams);
+                if (enable) {
+                    currentPrivateFlags &= ~noMoveAnimationFlag;
+                } else {
+                    currentPrivateFlags |= noMoveAnimationFlag;
+                }
+                privateFlagsField.setInt(mWindowParams, currentPrivateFlags);
+
+            } catch (Exception ignored) {
+                // default implementation ignored
+            }
         }
         return (X) this;
     }

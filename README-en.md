@@ -294,6 +294,8 @@ easyWindow.setLayoutInDisplayCutoutMode(int layoutInDisplayCutoutMode);
 easyWindow.setPreferMinimalPostProcessing(boolean enabled);
 // Set blur radius behind the window (supported on Android 12+)
 easyWindow.setBlurBehindRadius(@IntRange(from = 0) int blurBehindRadius);
+// Set whether the floating window can play move animations (supported only on Android 14 and above, framework compatible with Android 4.3)
+easyWindow.setCanPlayMoveAnimation(boolean enable);
 
 // Set the visibility of the window view
 easyWindow.setWindowViewVisibility(int visibility);

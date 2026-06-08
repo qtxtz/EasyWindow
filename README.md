@@ -300,6 +300,8 @@ easyWindow.setLayoutInDisplayCutoutMode(int layoutInDisplayCutoutMode);
 easyWindow.setPreferMinimalPostProcessing(boolean enabled);
 // 设置悬浮窗背后的高斯模糊半径大小（Android 12 及以上才支持）
 easyWindow.setBlurBehindRadius(@IntRange(from = 0) int blurBehindRadius);
+// 设置悬浮窗是否可以播放移动动画（Android 14 及以上才支持，框架兼容到 Android 4.3）
+easyWindow.setCanPlayMoveAnimation(boolean enable);
 
 // 设置悬浮窗可见性
 easyWindow.setWindowViewVisibility(int visibility);
